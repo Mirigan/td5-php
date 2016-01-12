@@ -89,4 +89,16 @@ class Model
 
         return $this->fetchOne($query);
     }
+
+    /**
+     * Getting all the copies
+     */
+    public function getCopies()
+    {
+        $query = $this->pdo->prepare('SELECT exemplaires.* FROM exemplaires');
+
+        $this->execute($query);
+
+        return $query->fetchAll();
+    }
 }
