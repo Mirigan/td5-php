@@ -58,12 +58,14 @@ $app->match('/addBook', function() use ($app) {
             }
 
             // Saving the book to database
-            $app['model']->insertBook($post->get('title'), $post->get('author'), $post->get('synopsis'),
+            $res = $app['model']->insertBook($post->get('title'), $post->get('author'), $post->get('synopsis'),
                 $image, (int)$post->get('copies'));
         }
     }
 
-    return $app['twig']->render('addBook.html.twig');
+    return $app['twig']->render('addBook.html.twig', array(
+        'res' => $res
+    ));
 })->bind('addBook');
 
 // Fiche d'un livre

@@ -58,7 +58,13 @@ class Model
             VALUES (?, ?, ?, ?)');
         $this->execute($query, array($title, $author, $synopsis, $image));
 
-        // TODO: Créer $copies exemplaires
+        $book_id = $this->pdo->lastInsertId();
+        $query = $this->pdo->prepare('INSERT INTO exemplaires (book_id) VALUES (?)');
+        for ($i = 0; $i<$copies; $i++){
+            $this->execute($query, array($book_id));
+        }
+
+        return $query;
     }
 
     /**
