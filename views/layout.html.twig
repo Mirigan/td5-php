@@ -15,23 +15,26 @@
             <h1>Bibliothèque</h1>
 
             <nav class="navbar navbar-default">
-               <ul class="nav navbar-nav">
+                <ul class="nav navbar-nav">
                     <li class="{% if home_active is defined %}active{% endif%}">
                         <a href="{{ path('home') }}">Accueil</a>
                     </li>
                     <li class="{% if books_active is defined %}active{% endif%}">
                         <a href="{{ path('books') }}">Les livres</a>
                     </li>
-                    <li class="{% if admin_active is defined %}active{% endif%}">
-                        <a href="{{ path('admin') }}">Administration</a>
-                    </li>
-                    <li class="{% if add_book_active is defined %}active{% endif%}">
-                        <a href="{{ path('addBook') }}">Ajouter un livre</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('logout') }}">Déconnexion</a>
-                    </li>
-               </ul>
+                    {% if app['session'].has('admin') != true %}
+                        <li class="{% if admin_active is defined %}active{% endif%}">
+                            <a href="{{ path('admin') }}">Administration</a>
+                        </li>
+                    {% else %}
+                        <li class="{% if add_book_active is defined %}active{% endif%}">
+                            <a href="{{ path('addBook') }}">Ajouter un livre</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('logout') }}">Déconnexion</a>
+                        </li>
+                    {% endif %}
+                </ul>
             </nav>
 
             {% block contents %}{% endblock %}
