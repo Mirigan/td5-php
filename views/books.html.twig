@@ -3,7 +3,7 @@
 
 {% block contents %}
 {% for book in books %}
-<a class="book" href="#">
+<a class="book" href="{{ path('book', {id: book.id}) }}">
     {% if book.image %}
         <img src="{{ app.request.basepath }}/uploads/{{ book.image }}_small.jpg" />
     {% endif %}

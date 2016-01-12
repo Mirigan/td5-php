@@ -1,0 +1,14 @@
+{% extends 'layout.html.twig' %}
+
+{% block contents %}
+    <div class="col-md-12 well">
+        <h2 class="text-center">{{ book.titre }} </h2><br>
+        {% if book.image %}
+            <img class="image" src="{{ app.request.basepath }}/uploads/{{ book.image }}.jpg" />
+        {% endif %}
+        <p class="">{{ book.synopsis }} </p><br>
+        <em>{{ book.auteur }}</em>
+        <br>
+        <br>
+    </div>
+{% endblock %}

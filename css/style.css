@@ -30,3 +30,8 @@ h1 {
     font-weight:bold;
     line-height:1.0;
 }
+
+.image{
+    float: left;
+    margin-right: 20px;
+}

@@ -66,3 +66,9 @@ $app->match('/addBook', function() use ($app) {
     return $app['twig']->render('addBook.html.twig');
 })->bind('addBook');
 
+// Fiche d'un livre
+$app->match('/book/{id}', function($id) use ($app) {
+    return $app['twig']->render('book.html.twig', array(
+        'book' => $app['model']->getBook($id)
+    ));
+})->bind('book');

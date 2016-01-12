@@ -38,6 +38,18 @@ class Model
     }
 
     /**
+     * Récupère un résultat exactement
+     */
+    protected function fetchOne(\PDOStatement $query)
+    {
+        if ($query->rowCount() != 1) {
+            return false;
+        } else {
+            return $query->fetch();
+        }
+    }
+
+    /**
      * Inserting a book in the database
      */
     public function insertBook($title, $author, $synopsis, $image, $copies)
@@ -59,5 +71,16 @@ class Model
         $this->execute($query);
 
         return $query->fetchAll();
+    }
+
+    /**
+     * Getting a book
+     */
+    public function getBook($id)
+    {
+        $query = $this->pdo->prepare('SELECT livres.* FROM livres WHERE livres.id = ?');
+        $this->execute($query, array($id));
+
+        return $this->fetchOne($query);
     }
 }
