@@ -109,22 +109,16 @@ class Model
     {
         $query = $this->pdo->prepare('
           SELECT ex.* FROM exemplaires ex
-          INNER JOIN emprunts em ON ex.id = em.exemplaire
           WHERE ex.book_id = ?
-          AND em.fini = 1
-        ');
-        $this->execute($query, array($idBook));
-        $res1 = $query->fetchAll();
-
-        $query = $this->pdo->prepare('
+          AND ex.id NOT IN(SELECT em.id FROM emprunts em)
+          UNION
           SELECT ex.* FROM exemplaires ex
-          WHERE ex.book_id = 11
+          WHERE ex.book_id = ?
           AND ex.id NOT IN(SELECT em.id FROM emprunts em)
         ');
-        $this->execute($query, array($idBook));
-        $res2 = $query->fetchAll();
+        $this->execute($query, array($idBook, $idBook));
 
-        return $res1+$res2;
+        return $query->fetchAll();
     }
 
 }
