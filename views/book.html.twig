@@ -14,30 +14,32 @@
     <div class="col-md-12 well">
         {% if copies|length == 0 %}
             <h4>Aucun exemplaire n'est disponible</h4><br>
+        {% elseif copies|length == 1 %}
+            <h4>Il y a {{ copies|length }} exemplaire disponible !</h4><br>
         {% else %}
-            {% if copies|length == 1 %}
-                <h4>Il y a {{ copies|length }} exemplaire disponible !</h4><br>
-            {% else %}
-                <h4>Il y a {{ copies|length }} exemplaires disponible !</h4><br>
-            {% endif %}
-
-            <ul class="list-group">
-                {% for copy in copies %}
-                    <li class="list-group-item">
-                        {% if app['session'].has('admin') == true %}
-                        <a href="{{ path('addCopy', {idBook: book.id, idCopy: copy.id}) }}" class="btn btn-success btn-emprunt">
-                            Emprunter
-                        </a>
-                        {% endif %}
-                        Exemplaire n° {{ copy.id }} disponible.
-                    </li>
-                {% endfor %}
-                {% for copy in copiesNotAvailable %}
-                    <li class="list-group-item list-group-item-danger">
-                        Exemplaire n° {{ copy.id }} non disponible.
-                    </li>
-                {% endfor %}
-            </ul>
+            <h4>Il y a {{ copies|length }} exemplaires disponible !</h4><br>
         {% endif %}
+        <ul class="list-group">
+            {% for copy in copies %}
+                <li class="list-group-item">
+                    {% if app['session'].has('admin') == true %}
+                    <a href="{{ path('addCopy', {idBook: book.id, idCopy: copy.id}) }}" class="btn btn-success btn-emprunt">
+                        Emprunter
+                    </a>
+                    {% endif %}
+                    Exemplaire n° {{ copy.id }} disponible.
+                </li>
+            {% endfor %}
+            {% for copy in copiesNotAvailable %}
+                <li class="list-group-item list-group-item-danger">
+                    {% if app['session'].has('admin') == true %}
+                        <a href="{{ path('returnCopy', {idBook: book.id, idCopy: copy.id, idLoan: copy.emprunt_id}) }}" class="btn btn-success btn-emprunt">
+                            Retour
+                        </a>
+                    {% endif %}
+                    Exemplaire n° {{ copy.id }} non disponible. Il est emprunté par {{ copy.personne }}
+                </li>
+            {% endfor %}
+        </ul>
     </div>
 {% endblock %}

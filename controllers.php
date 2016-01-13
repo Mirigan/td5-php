@@ -75,9 +75,9 @@ $app->match('/book/{id}', function($id) use ($app) {
         'book' => $app['model']->getBook($id),
         'copies' => $app['model']->getAvailableCopies($id),
         'copiesNotAvailable' => $app['model']->getNotAvailableCopies($id),
+        'success' => false
     ));
 })->bind('book');
-
 
 // Emprunt d'un livre
 $app->match('/book/{idBook}/copy/{idCopy}/loan', function($idBook, $idCopy) use ($app) {
@@ -95,3 +95,10 @@ $app->match('/book/{idBook}/copy/{idCopy}/loan', function($idBook, $idCopy) use 
         'success' => $res
     ));
 })->bind('addCopy');
+
+// Retour d'un livre
+$app->match('/book/{idBook}/copy/{idCopy}/return/{idLoan}', function($idBook, $idCopy, $idLoan) use ($app) {
+    $app['model']->returnBook($idLoan);
+
+    return $app['twig']->redirect('/book', array('id' => $idBook));
+})->bind('returnCopy');
