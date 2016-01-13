@@ -11,4 +11,21 @@
         <br>
         <br>
     </div>
+    <div class="col-md-12 well">
+        {% if copies|length == 0 %}
+            <h4>Aucun exemplaire n'est disponible</h4><br>
+        {% else %}
+            {% if copies|length == 1 %}
+                <h4>Il y a {{ copies|length }} exemplaire disponible !</h4><br>
+            {% else %}
+                <h4>Il y a {{ copies|length }} exemplaires disponible !</h4><br>
+            {% endif %}
+
+            <ul class="list-group">
+                {% for copie in copies %}
+                    <li class="list-group-item">Exemplaire n° {{ copie.id }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
 {% endblock %}

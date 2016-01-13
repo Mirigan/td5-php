@@ -101,4 +101,30 @@ class Model
 
         return $query->fetchAll();
     }
+
+    /**
+     * Getting available copies for a book
+     */
+    public function getAvailableCopies($idBook)
+    {
+        $query = $this->pdo->prepare('
+          SELECT ex.* FROM exemplaires ex
+          INNER JOIN emprunts em ON ex.id = em.exemplaire
+          WHERE ex.book_id = ?
+          AND em.fini = 1
+        ');
+        $this->execute($query, array($idBook));
+        $res1 = $query->fetchAll();
+
+        $query = $this->pdo->prepare('
+          SELECT ex.* FROM exemplaires ex
+          WHERE ex.book_id = 11
+          AND ex.id NOT IN(SELECT em.id FROM emprunts em)
+        ');
+        $this->execute($query, array($idBook));
+        $res2 = $query->fetchAll();
+
+        return $res1+$res2;
+    }
+
 }
