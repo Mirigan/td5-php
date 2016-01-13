@@ -73,7 +73,8 @@ $app->match('/addBook', function() use ($app) {
 $app->match('/book/{id}', function($id) use ($app) {
     return $app['twig']->render('book.html.twig', array(
         'book' => $app['model']->getBook($id),
-        'copies' => $app['model']->getAvailableCopies($id)
+        'copies' => $app['model']->getAvailableCopies($id),
+        'copiesNotAvailable' => $app['model']->getNotAvailableCopies($id),
     ));
 })->bind('book');
 

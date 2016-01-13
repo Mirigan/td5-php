@@ -21,15 +21,23 @@
                 <h4>Il y a {{ copies|length }} exemplaires disponible !</h4><br>
             {% endif %}
 
-            {% if app['session'].has('admin') == true %}
             <ul class="list-group">
                 {% for copy in copies %}
-                    <li class="list-group-item"><a href="{{ path('addCopy', {idBook: book.id, idCopy: copy.id}) }}" class="btn btn-success btn-emprunt">Emprunter
-                        </a>Exemplaire n° {{ copy.id }}
+                    <li class="list-group-item">
+                        {% if app['session'].has('admin') == true %}
+                        <a href="{{ path('addCopy', {idBook: book.id, idCopy: copy.id}) }}" class="btn btn-success btn-emprunt">
+                            Emprunter
+                        </a>
+                        {% endif %}
+                        Exemplaire n° {{ copy.id }} disponible.
+                    </li>
+                {% endfor %}
+                {% for copy in copiesNotAvailable %}
+                    <li class="list-group-item list-group-item-danger">
+                        Exemplaire n° {{ copy.id }} non disponible.
                     </li>
                 {% endfor %}
             </ul>
-            {% endif %}
         {% endif %}
     </div>
 {% endblock %}

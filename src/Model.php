@@ -108,11 +108,11 @@ class Model
     public function getAvailableCopies($idBook)
     {
         $query = $this->pdo->prepare('
-          SELECT ex.* FROM exemplaires ex inner join emprunts em on ex.id = em.exemplaire
+          SELECT DISTINCT ex.* FROM exemplaires ex inner join emprunts em on ex.id = em.exemplaire
           WHERE ex.book_id = ?
           AND em.fini = 1
           UNION
-          SELECT ex.* FROM exemplaires ex
+          SELECT DISTINCT ex.* FROM exemplaires ex
           WHERE ex.book_id = ?
           AND ex.id NOT IN(SELECT em.id FROM emprunts em)
         ');
@@ -139,15 +139,11 @@ class Model
     public function getNotAvailableCopies($idBook)
     {
         $query = $this->pdo->prepare('
-          SELECT ex.* FROM exemplaires ex
+          SELECT DISTINCT ex.* FROM exemplaires ex inner join emprunts em on ex.id = em.exemplaire
           WHERE ex.book_id = ?
-          AND ex.id NOT IN(SELECT em.id FROM emprunts em)
-          UNION
-          SELECT ex.* FROM exemplaires ex
-          WHERE ex.book_id = ?
-          AND ex.id NOT IN(SELECT em.id FROM emprunts em)
+          AND em.fini = 0
         ');
-        $this->execute($query, array($idBook, $idBook));
+        $this->execute($query, array($idBook));
 
         return $query->fetchAll();
     }
