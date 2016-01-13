@@ -108,9 +108,9 @@ class Model
     public function getAvailableCopies($idBook)
     {
         $query = $this->pdo->prepare('
-          SELECT ex.* FROM exemplaires ex
+          SELECT ex.* FROM exemplaires ex inner join emprunts em on ex.id = em.exemplaire
           WHERE ex.book_id = ?
-          AND ex.id NOT IN(SELECT em.id FROM emprunts em)
+          AND em.fini = 1
           UNION
           SELECT ex.* FROM exemplaires ex
           WHERE ex.book_id = ?
@@ -131,6 +131,25 @@ class Model
         $this->execute($query, array($name, $idCopy, date("Y-m-d"), $endDate, false));
 
         return $query;
+    }
+
+    /**
+     * Getting not available copies for a book
+     */
+    public function getNotAvailableCopies($idBook)
+    {
+        $query = $this->pdo->prepare('
+          SELECT ex.* FROM exemplaires ex
+          WHERE ex.book_id = ?
+          AND ex.id NOT IN(SELECT em.id FROM emprunts em)
+          UNION
+          SELECT ex.* FROM exemplaires ex
+          WHERE ex.book_id = ?
+          AND ex.id NOT IN(SELECT em.id FROM emprunts em)
+        ');
+        $this->execute($query, array($idBook, $idBook));
+
+        return $query->fetchAll();
     }
 
 }
