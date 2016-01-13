@@ -121,4 +121,16 @@ class Model
         return $query->fetchAll();
     }
 
+    /**
+     * Insert a new loan
+     */
+    public function insertLoan($idCopy, $endDate, $name){
+        $query = $this->pdo->prepare('INSERT INTO emprunts (personne, exemplaire, debut, fin, fini)
+            VALUES (?, ?, ?, ?, ?)');
+
+        $this->execute($query, array($name, $idCopy, date("Y-m-d"), $endDate, false));
+
+        return $query;
+    }
+
 }

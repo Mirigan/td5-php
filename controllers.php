@@ -1,6 +1,7 @@
 <?php
 
 use Gregwar\Image\Image;
+use Carbon\Carbon;
 
 $app->match('/', function() use ($app) {
     return $app['twig']->render('home.html.twig');
@@ -75,3 +76,21 @@ $app->match('/book/{id}', function($id) use ($app) {
         'copies' => $app['model']->getAvailableCopies($id)
     ));
 })->bind('book');
+
+
+// Emprunt d'un livre
+$app->match('/book/{idBook}/copy/{idCopy}/loan', function($idBook, $idCopy) use ($app) {
+    $request = $app['request'];
+    $res = false;
+    if ($request->getMethod() == 'POST') {
+        $post = $request->request;
+        if ($post->has('endDate') && $post->has('name')) {
+            $endDate = Carbon::createFromFormat('d/m/Y', $post->get('endDate'));
+            $res = $app['model']->insertLoan($idCopy, $endDate, $post->get('name'));
+        }
+    }
+
+    return $app['twig']->render('loan.html.twig', array(
+        'success' => $res
+    ));
+})->bind('addCopy');

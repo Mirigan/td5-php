@@ -1,19 +1,36 @@
-{% set admin_active = 1 %}
 {% extends 'layout.html.twig' %}
 
 {% block contents %}
 {% if success %}
 <div class="alert alert-success loginsuccess">
-    Vous êtes maintenant identifiés!
+    Votre emprunt a été enregistré !
 </div>
 {% endif %}
-
 <form method="post">
-    <b>Identifiant</b>: 
-    <input class="form-control" type="text" name="login" />
-    <b>Mot de passe</b>:
-    <input class="form-control" type="password" name="password" />
+
+    <div class="form-group">
+        <b>Nom</b>:
+        <input class="form-control" type="text" name="name" />
+    </div>
+
+    <div class="form-group">
+        <b>Date de fin</b>:
+        <div class='input-group date' id='datetimepicker1'>
+            <input type="text" class="form-control" name="endDate" placeholder="jj/mm/aaaa">
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+            </span>
+        </div>
+    </div>
     <br/>
-    <input type="submit" class="btn btn-success" value="Identification" />
+    <input type="submit" class="btn btn-success" value="Enregistrer" />
 </form>
+
+<script type="text/javascript">
+    $('#datetimepicker1 input').datepicker({
+        startDate: "today",
+        language: "fr"
+    });
+</script>
+
 {% endblock %}

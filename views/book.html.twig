@@ -21,11 +21,15 @@
                 <h4>Il y a {{ copies|length }} exemplaires disponible !</h4><br>
             {% endif %}
 
+            {% if app['session'].has('admin') == true %}
             <ul class="list-group">
-                {% for copie in copies %}
-                    <li class="list-group-item">Exemplaire n° {{ copie.id }}</li>
+                {% for copy in copies %}
+                    <li class="list-group-item"><a href="{{ path('addCopy', {idBook: book.id, idCopy: copy.id}) }}" class="btn btn-success btn-emprunt">Emprunter
+                        </a>Exemplaire n° {{ copy.id }}
+                    </li>
                 {% endfor %}
             </ul>
+            {% endif %}
         {% endif %}
     </div>
 {% endblock %}
