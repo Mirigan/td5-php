@@ -100,5 +100,5 @@ $app->match('/book/{idBook}/copy/{idCopy}/loan', function($idBook, $idCopy) use 
 $app->match('/book/{idBook}/copy/{idCopy}/return/{idLoan}', function($idBook, $idCopy, $idLoan) use ($app) {
     $app['model']->returnBook($idLoan);
 
-    return $app['twig']->redirect('/book', array('id' => $idBook));
+    return $app->redirect($app['url_generator']->generate('book', array('id' => $idBook)));
 })->bind('returnCopy');
