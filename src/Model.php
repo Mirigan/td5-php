@@ -103,6 +103,18 @@ class Model
     }
 
     /**
+     * Getting all the copies for a book
+     */
+    public function getBookCopies($id_book)
+    {
+        $query = $this->pdo->prepare('SELECT exemplaires.* FROM exemplaires WHERE exemplaires.book_id = ?');
+
+        $this->execute($query, array($id_book));
+
+        return $query->fetchAll();
+    }
+
+    /**
      * Getting available copies for a book
      */
     public function getAvailableCopies($idBook)

@@ -59,4 +59,32 @@ class SiteTests extends BaseTests
         $books = $this->app['model']->getBooks();
         $this->assertEquals(1, count($books));
     }
+
+    /**
+     * Testing book loan copies
+     */
+    public function testEmprunt()
+    {
+        $client = $this->createClient();
+
+        // Inserting one book with 3 copies
+        $this->app['model']->insertBook('Test', 'Someone', 'A test book', 'image', 3);;
+
+        $copies = $this->app['model']->getAvailableCopies(1);
+        $this->assertEquals(3, count($copies));
+
+        // Inserting one using a POST request through the form
+        $client->request('GET', '/book/1/copy/1/loan');
+        $form = $client->getCrawler()->filter('form')->form();
+        $form['name'] = 'Test';
+        $form['endDate'] = '01/02/2016';
+        $client->submit($form);
+
+        $copies = $this->app['model']->getAvailableCopies(1);
+        $this->assertEquals(2, count($copies));
+
+        $client->request('GET', '/book/1/copy/1/return/1');
+        $copies = $this->app['model']->getAvailableCopies(1);
+        $this->assertEquals(3, count($copies));
+    }
 }
